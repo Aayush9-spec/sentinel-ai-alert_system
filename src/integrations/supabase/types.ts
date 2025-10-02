@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      feedback: {
+        Row: {
+          author: string
+          created_at: string
+          id: string
+          keywords: string[] | null
+          rating: number | null
+          sentiment: string | null
+          sentiment_score: number | null
+          source: string
+          suggested_response: string | null
+          text: string
+          timestamp: string
+          urgency: string | null
+        }
+        Insert: {
+          author: string
+          created_at?: string
+          id?: string
+          keywords?: string[] | null
+          rating?: number | null
+          sentiment?: string | null
+          sentiment_score?: number | null
+          source: string
+          suggested_response?: string | null
+          text: string
+          timestamp?: string
+          urgency?: string | null
+        }
+        Update: {
+          author?: string
+          created_at?: string
+          id?: string
+          keywords?: string[] | null
+          rating?: number | null
+          sentiment?: string | null
+          sentiment_score?: number | null
+          source?: string
+          suggested_response?: string | null
+          text?: string
+          timestamp?: string
+          urgency?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
