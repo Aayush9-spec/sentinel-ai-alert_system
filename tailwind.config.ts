@@ -59,6 +59,10 @@ export default {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
         },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
         positive: "hsl(var(--positive))",
         neutral: "hsl(var(--neutral))",
         negative: "hsl(var(--negative))",

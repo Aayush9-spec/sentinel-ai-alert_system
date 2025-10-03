@@ -1,18 +1,25 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Feedback, UrgencyFilter, SourceFilter, SentimentFilter } from "@/types/feedback";
 import { DashboardStats } from "@/components/DashboardStats";
 import { FeedbackFilters } from "@/components/FeedbackFilters";
 import { FeedbackCard } from "@/components/FeedbackCard";
 import { TrendChart } from "@/components/TrendChart";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, LogOut, User } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import type { Session, User as SupabaseUser } from "@supabase/supabase-js";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [feedback, setFeedback] = useState<Feedback[]>([]);
   const [filteredFeedback, setFilteredFeedback] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(null);
   
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,8 +27,35 @@ const Index = () => {
   const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
   const [sentimentFilter, setSentimentFilter] = useState<SentimentFilter>("all");
 
+  // Auth check
+  useEffect(() => {
+    // Set up auth state listener first
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (!session) {
+        navigate("/auth");
+      }
+    });
+
+    // Then check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (!session) {
+        navigate("/auth");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
   // Fetch feedback data
   useEffect(() => {
+    if (!user) return;
+
     async function fetchFeedback() {
       try {
         setLoading(true);
@@ -59,7 +93,6 @@ const Index = () => {
         },
         (payload) => {
           console.log("Real-time update:", payload);
-          // Refetch on any change
           fetchFeedback();
         }
       )
@@ -68,7 +101,7 @@ const Index = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [user]);
 
   // Apply filters
   useEffect(() => {
@@ -109,7 +142,7 @@ const Index = () => {
     setFilteredFeedback(filtered);
   }, [feedback, searchQuery, urgencyFilter, sourceFilter, sentimentFilter]);
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center space-y-4">
@@ -131,78 +164,184 @@ const Index = () => {
     );
   }
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success("Logged out successfully");
+    navigate("/auth");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-6">
+      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-purple-500 to-primary bg-clip-text text-transparent">
-                SentinelAI
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-info to-primary bg-clip-text text-transparent">
+                SentinelAI Command Center
               </h1>
-              <p className="text-muted-foreground mt-1">Customer Sentiment Monitoring Dashboard</p>
+              <p className="text-sm text-muted-foreground mt-1">Real-time Customer Sentiment Monitoring</p>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-              Live monitoring
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm">
+                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+                <span className="text-muted-foreground">Live</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2 text-muted-foreground hover:text-foreground"
+              >
+                <User className="h-4 w-4" />
+                <span className="hidden sm:inline">{user.email}</span>
+                <LogOut className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 space-y-8">
-        {/* Stats */}
-        <DashboardStats feedback={feedback} />
+      {/* 3-Column Layout */}
+      <main className="container mx-auto px-6 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-140px)]">
+          {/* Column 1: KPIs & Trending */}
+          <div className="lg:col-span-3 space-y-6 overflow-y-auto">
+            <DashboardStats feedback={feedback} />
+            <TrendChart feedback={feedback} />
+          </div>
 
-        {/* Filters */}
-        <FeedbackFilters
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          urgencyFilter={urgencyFilter}
-          onUrgencyChange={setUrgencyFilter}
-          sourceFilter={sourceFilter}
-          onSourceChange={setSourceFilter}
-          sentimentFilter={sentimentFilter}
-          onSentimentChange={setSentimentFilter}
-        />
+          {/* Column 2: Live Triage Feed */}
+          <div className="lg:col-span-5 space-y-4 overflow-y-auto">
+            <div className="sticky top-0 bg-background pb-4 z-10">
+              <FeedbackFilters
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                urgencyFilter={urgencyFilter}
+                onUrgencyChange={setUrgencyFilter}
+                sourceFilter={sourceFilter}
+                onSourceChange={setSourceFilter}
+                sentimentFilter={sentimentFilter}
+                onSentimentChange={setSentimentFilter}
+              />
+              <div className="flex items-center justify-between mt-4">
+                <h2 className="text-lg font-bold text-foreground">
+                  Live Feed ({filteredFeedback.length})
+                </h2>
+                {filteredFeedback.length !== feedback.length && (
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setUrgencyFilter("all");
+                      setSourceFilter("all");
+                      setSentimentFilter("all");
+                    }}
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </div>
 
-        {/* Trending Topics */}
-        <TrendChart feedback={feedback} />
-
-        {/* Feedback Grid */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">
-              Feedback ({filteredFeedback.length})
-            </h2>
-            {filteredFeedback.length !== feedback.length && (
-              <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setUrgencyFilter("all");
-                  setSourceFilter("all");
-                  setSentimentFilter("all");
-                }}
-                className="text-sm text-primary hover:underline"
-              >
-                Clear filters
-              </button>
+            {filteredFeedback.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                No feedback matches your filters
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredFeedback.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => setSelectedFeedback(item)}
+                    className={`cursor-pointer transition-all ${
+                      selectedFeedback?.id === item.id
+                        ? "ring-2 ring-primary"
+                        : "hover:shadow-[var(--shadow-hover)]"
+                    }`}
+                  >
+                    <FeedbackCard feedback={item} />
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 
-          {filteredFeedback.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              No feedback matches your filters
-            </div>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {filteredFeedback.map((item) => (
-                <FeedbackCard key={item.id} feedback={item} />
-              ))}
-            </div>
-          )}
+          {/* Column 3: AI Co-Pilot Panel */}
+          <div className="lg:col-span-4 overflow-y-auto">
+            {selectedFeedback ? (
+              <div className="bg-card border border-border rounded-xl p-6 shadow-[var(--shadow-card)] space-y-6 sticky top-0">
+                <div className="flex items-start justify-between">
+                  <h3 className="text-lg font-bold text-foreground">AI Co-Pilot</h3>
+                  <button
+                    onClick={() => setSelectedFeedback(null)}
+                    className="text-muted-foreground hover:text-foreground text-sm"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* AI Analysis */}
+                <div className="space-y-2">
+                  <h4 className="text-sm font-semibold text-primary">AI Analysis</h4>
+                  <p className="text-sm text-foreground/90">
+                    {selectedFeedback.urgency === "HIGH"
+                      ? "🚨 Critical issue requiring immediate attention. Customer is frustrated and may churn if not addressed quickly."
+                      : selectedFeedback.sentiment === "negative"
+                      ? "⚠️ Negative sentiment detected. Customer needs reassurance and a clear resolution path."
+                      : "✅ Positive feedback. Great opportunity to strengthen customer relationship."}
+                  </p>
+                </div>
+
+                {/* AI Suggested Response */}
+                {selectedFeedback.suggested_response && (
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-semibold text-primary">Suggested Response</h4>
+                    <div className="bg-secondary/20 border border-border rounded-lg p-4">
+                      <p className="text-sm text-foreground/90 whitespace-pre-wrap">
+                        {selectedFeedback.suggested_response}
+                      </p>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(selectedFeedback.suggested_response!);
+                        toast.success("Response copied!");
+                      }}
+                      className="w-full"
+                    >
+                      Copy Response
+                    </Button>
+                  </div>
+                )}
+
+                {/* Action Center */}
+                <div className="space-y-3 border-t border-border pt-6">
+                  <h4 className="text-sm font-semibold text-foreground">Action Center</h4>
+                  
+                  <Button variant="outline" className="w-full justify-start gap-2">
+                    <User className="h-4 w-4" />
+                    Assign to Team Member
+                  </Button>
+                  
+                  <Button variant="outline" className="w-full justify-start gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    Change Status
+                  </Button>
+                  
+                  {selectedFeedback.urgency === "HIGH" && (
+                    <Button variant="destructive" className="w-full justify-start gap-2">
+                      🚨 Escalate Issue
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-card/50 border border-border/50 rounded-xl p-12 text-center text-muted-foreground">
+                <p>Select a feedback item to view AI analysis and actions</p>
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>
