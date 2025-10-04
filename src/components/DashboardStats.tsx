@@ -48,20 +48,20 @@ export function DashboardStats({ feedback }: DashboardStatsProps) {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="space-y-3">
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <Card key={stat.title} className="border-border/50 bg-gradient-to-br from-card to-card/50 hover:shadow-[var(--shadow-hover)] transition-all">
+          <Card key={stat.title} className="border-border/50 bg-gradient-to-br from-card to-card/80 hover:shadow-[var(--shadow-hover)] transition-all hover:scale-[1.02] hover:border-primary/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <div className={`${stat.bgColor} p-2 rounded-lg`}>
+              <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{stat.title}</CardTitle>
+              <div className={`${stat.bgColor} p-2.5 rounded-lg backdrop-blur-sm`}>
                 <Icon className={`h-4 w-4 ${stat.color}`} />
               </div>
             </CardHeader>
             <CardContent>
-              <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-              <p className="text-xs text-muted-foreground mt-1">{stat.description}</p>
+              <div className={`text-3xl font-bold ${stat.color} tracking-tight`}>{stat.value}</div>
+              <p className="text-xs text-muted-foreground mt-1.5 font-medium">{stat.description}</p>
             </CardContent>
           </Card>
         );

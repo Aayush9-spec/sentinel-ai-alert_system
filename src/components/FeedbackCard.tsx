@@ -27,7 +27,7 @@ export function FeedbackCard({ feedback }: FeedbackCardProps) {
   };
 
   return (
-    <Card className="transition-all hover:shadow-[var(--shadow-hover)] border-border/50 bg-gradient-to-br from-card to-card/50">
+    <Card className="transition-all hover:shadow-[var(--shadow-glow)] border-border/50 bg-gradient-to-br from-card via-card/95 to-card/90 hover:border-primary/30 backdrop-blur-sm">
       <CardHeader className="space-y-3 pb-4">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2 flex-wrap">
@@ -75,22 +75,22 @@ export function FeedbackCard({ feedback }: FeedbackCardProps) {
         )}
 
         {feedback.suggested_response && (
-          <div className="mt-4 rounded-lg bg-primary/5 p-4 border border-primary/10">
+          <div className="mt-4 rounded-lg bg-primary/5 p-4 border border-primary/20 backdrop-blur-sm hover:bg-primary/10 transition-all">
             <div className="flex items-start justify-between gap-2 mb-2">
-              <p className="text-sm font-semibold text-primary">Suggested Response</p>
+              <p className="text-sm font-bold text-primary uppercase tracking-wide">AI Suggested Response</p>
               <button
                 onClick={handleCopyResponse}
-                className="text-primary hover:text-primary/80 transition-colors"
+                className="text-primary hover:text-primary/80 transition-all hover:scale-110 active:scale-95"
                 aria-label="Copy response"
               >
                 {copied ? (
-                  <Check className="h-4 w-4" />
+                  <Check className="h-4 w-4 text-success" />
                 ) : (
                   <Copy className="h-4 w-4" />
                 )}
               </button>
             </div>
-            <p className="text-sm text-foreground/90">{feedback.suggested_response}</p>
+            <p className="text-sm text-foreground/90 leading-relaxed">{feedback.suggested_response}</p>
           </div>
         )}
       </CardContent>

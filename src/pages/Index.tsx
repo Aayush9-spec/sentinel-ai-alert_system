@@ -173,25 +173,25 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-border/50 bg-gradient-to-r from-card/95 via-card/90 to-card/95 backdrop-blur-md sticky top-0 z-50 shadow-lg">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-info to-primary bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-info to-primary bg-clip-text text-transparent animate-pulse">
                 SentinelAI Command Center
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">Real-time Customer Sentiment Monitoring</p>
+              <p className="text-sm text-muted-foreground mt-1 font-medium">Real-time Customer Sentiment Monitoring</p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm">
-                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
-                <span className="text-muted-foreground">Live</span>
+              <div className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
+                <div className="h-2 w-2 rounded-full bg-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                <span className="text-success font-semibold">Live</span>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleLogout}
-                className="gap-2 text-muted-foreground hover:text-foreground"
+                className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
               >
                 <User className="h-4 w-4" />
                 <span className="hidden sm:inline">{user.email}</span>
@@ -270,21 +270,27 @@ const Index = () => {
           {/* Column 3: AI Co-Pilot Panel */}
           <div className="lg:col-span-4 overflow-y-auto">
             {selectedFeedback ? (
-              <div className="bg-card border border-border rounded-xl p-6 shadow-[var(--shadow-card)] space-y-6 sticky top-0">
-                <div className="flex items-start justify-between">
-                  <h3 className="text-lg font-bold text-foreground">AI Co-Pilot</h3>
+              <div className="bg-gradient-to-br from-card via-card/95 to-card/90 border border-border/50 rounded-xl p-6 shadow-[var(--shadow-glow)] space-y-6 sticky top-0 backdrop-blur-sm hover:border-primary/20 transition-all">
+                <div className="flex items-start justify-between border-b border-border/50 pb-4">
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                      AI Co-Pilot
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-1">Powered by SentinelAI</p>
+                  </div>
                   <button
                     onClick={() => setSelectedFeedback(null)}
-                    className="text-muted-foreground hover:text-foreground text-sm"
+                    className="text-muted-foreground hover:text-foreground text-lg hover:scale-110 transition-all hover:rotate-90"
                   >
                     ✕
                   </button>
                 </div>
 
                 {/* AI Analysis */}
-                <div className="space-y-2">
-                  <h4 className="text-sm font-semibold text-primary">AI Analysis</h4>
-                  <p className="text-sm text-foreground/90">
+                <div className="space-y-3 p-4 rounded-lg bg-primary/5 border border-primary/10">
+                  <h4 className="text-sm font-bold text-primary uppercase tracking-wide">AI Analysis</h4>
+                  <p className="text-sm text-foreground/90 leading-relaxed">
                     {selectedFeedback.urgency === "HIGH"
                       ? "🚨 Critical issue requiring immediate attention. Customer is frustrated and may churn if not addressed quickly."
                       : selectedFeedback.sentiment === "negative"
@@ -295,10 +301,10 @@ const Index = () => {
 
                 {/* AI Suggested Response */}
                 {selectedFeedback.suggested_response && (
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-primary">Suggested Response</h4>
-                    <div className="bg-secondary/20 border border-border rounded-lg p-4">
-                      <p className="text-sm text-foreground/90 whitespace-pre-wrap">
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-bold text-primary uppercase tracking-wide">Suggested Response</h4>
+                    <div className="bg-secondary/20 border border-border rounded-lg p-4 hover:bg-secondary/30 transition-all">
+                      <p className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed">
                         {selectedFeedback.suggested_response}
                       </p>
                     </div>
@@ -308,7 +314,7 @@ const Index = () => {
                         await navigator.clipboard.writeText(selectedFeedback.suggested_response!);
                         toast.success("Response copied!");
                       }}
-                      className="w-full"
+                      className="w-full bg-primary hover:bg-primary/90 transition-all hover:scale-[1.02] active:scale-95 shadow-lg"
                     >
                       Copy Response
                     </Button>
@@ -316,29 +322,34 @@ const Index = () => {
                 )}
 
                 {/* Action Center */}
-                <div className="space-y-3 border-t border-border pt-6">
-                  <h4 className="text-sm font-semibold text-foreground">Action Center</h4>
+                <div className="space-y-3 border-t border-border/50 pt-6">
+                  <h4 className="text-sm font-bold text-foreground uppercase tracking-wide">Action Center</h4>
                   
-                  <Button variant="outline" className="w-full justify-start gap-2">
+                  <Button variant="outline" className="w-full justify-start gap-2 hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all">
                     <User className="h-4 w-4" />
                     Assign to Team Member
                   </Button>
                   
-                  <Button variant="outline" className="w-full justify-start gap-2">
+                  <Button variant="outline" className="w-full justify-start gap-2 hover:bg-info/10 hover:border-info/30 hover:text-info transition-all">
                     <AlertCircle className="h-4 w-4" />
                     Change Status
                   </Button>
                   
                   {selectedFeedback.urgency === "HIGH" && (
-                    <Button variant="destructive" className="w-full justify-start gap-2">
+                    <Button variant="destructive" className="w-full justify-start gap-2 animate-pulse hover:scale-[1.02] transition-all shadow-lg">
                       🚨 Escalate Issue
                     </Button>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="bg-card/50 border border-border/50 rounded-xl p-12 text-center text-muted-foreground">
-                <p>Select a feedback item to view AI analysis and actions</p>
+              <div className="bg-gradient-to-br from-card/50 via-card/40 to-card/30 border border-border/30 rounded-xl p-12 text-center backdrop-blur-sm">
+                <div className="space-y-4">
+                  <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                    <AlertCircle className="h-8 w-8 text-primary/50" />
+                  </div>
+                  <p className="text-muted-foreground font-medium">Select a feedback item to view AI analysis and actions</p>
+                </div>
               </div>
             )}
           </div>

@@ -61,10 +61,10 @@ All colors MUST be HSL.
     --gradient-urgent: linear-gradient(135deg, hsl(0 91% 71%) 0%, hsl(0 100% 75%) 100%);
     
     /* Shadows */
-    --shadow-card: 0 4px 16px -4px hsl(0 0% 0% / 0.4);
+    --shadow-card: 0 2px 8px -1px hsl(var(--primary) / 0.1);
     --shadow-urgent: 0 4px 24px -4px hsl(0 91% 71% / 0.5);
-    --shadow-hover: 0 8px 32px -8px hsl(0 0% 0% / 0.5);
-    --shadow-glow: 0 0 40px hsl(199 89% 48% / 0.3);
+    --shadow-hover: 0 8px 16px -4px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 8px 32px -8px hsl(var(--primary) / 0.3), 0 0 0 1px hsl(var(--primary) / 0.1);
 
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 210 40% 98%;
@@ -108,9 +108,10 @@ All colors MUST be HSL.
     --negative: 0 91% 71%;
     --gradient-primary: linear-gradient(135deg, hsl(199 89% 48%) 0%, hsl(210 100% 60%) 100%);
     --gradient-card: linear-gradient(to bottom right, hsl(222 47% 14%) 0%, hsl(222 47% 16%) 100%);
-    --shadow-card: 0 4px 16px -4px hsl(0 0% 0% / 0.4);
+    --shadow-card: 0 2px 8px -1px hsl(var(--primary) / 0.1);
     --shadow-urgent: 0 4px 24px -4px hsl(0 91% 71% / 0.5);
-    --shadow-hover: 0 8px 32px -8px hsl(0 0% 0% / 0.5);
+    --shadow-hover: 0 8px 16px -4px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 8px 32px -8px hsl(var(--primary) / 0.3), 0 0 0 1px hsl(var(--primary) / 0.1);
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 199 89% 48%;

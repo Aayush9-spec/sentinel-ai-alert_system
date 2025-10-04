@@ -11,27 +11,27 @@ const sourceConfig = {
   twitter: {
     icon: Twitter,
     label: 'Twitter',
-    className: 'bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 border-blue-500/20',
+    className: 'bg-info/10 text-info hover:bg-info/20 border-info/20',
   },
   reviews: {
     icon: Star,
     label: 'Reviews',
-    className: 'bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 border-amber-500/20',
+    className: 'bg-warning/10 text-warning-foreground hover:bg-warning/20 border-warning/20',
   },
   forum: {
     icon: MessageSquare,
     label: 'Forum',
-    className: 'bg-purple-500/10 text-purple-600 hover:bg-purple-500/20 border-purple-500/20',
+    className: 'bg-primary/10 text-primary hover:bg-primary/20 border-primary/20',
   },
   email: {
     icon: Mail,
     label: 'Email',
-    className: 'bg-green-500/10 text-green-600 hover:bg-green-500/20 border-green-500/20',
+    className: 'bg-success/10 text-success hover:bg-success/20 border-success/20',
   },
   chat: {
     icon: MessageCircle,
     label: 'Chat',
-    className: 'bg-pink-500/10 text-pink-600 hover:bg-pink-500/20 border-pink-500/20',
+    className: 'bg-secondary/30 text-secondary-foreground hover:bg-secondary/40 border-secondary/20',
   },
 };
 
