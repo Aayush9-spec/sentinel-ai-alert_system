@@ -44,7 +44,7 @@ export const IntegrationPanel = () => {
         .select('*')
         .eq('urgency', 'HIGH')
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (fetchError || !feedback) {
         toast.error('No HIGH urgency feedback found to send');
@@ -79,7 +79,7 @@ export const IntegrationPanel = () => {
         .select('*')
         .eq('urgency', 'HIGH')
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (fetchError || !feedback) {
         toast.error('No HIGH urgency feedback found to send');
