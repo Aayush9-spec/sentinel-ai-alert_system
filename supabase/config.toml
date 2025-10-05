@@ -1,1 +1,10 @@
 project_id = "dnoxmoyrzzakrmpbdrrn"
+
+[functions.monitor-twitter]
+verify_jwt = false
+
+[functions.send-email-alert]
+verify_jwt = false
+
+[functions.send-slack-alert]
+verify_jwt = false

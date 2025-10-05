@@ -6,6 +6,8 @@ import { DashboardStats } from "@/components/DashboardStats";
 import { FeedbackFilters } from "@/components/FeedbackFilters";
 import { FeedbackCard } from "@/components/FeedbackCard";
 import { TrendChart } from "@/components/TrendChart";
+import { IntegrationPanel } from "@/components/IntegrationPanel";
+import { SampleDataButton } from "@/components/SampleDataButton";
 import { Loader2, AlertCircle, LogOut, User } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -34,7 +36,7 @@ const Index = () => {
       setSession(session);
       setUser(session?.user ?? null);
       
-      if (!session) {
+      if (!session && event !== 'INITIAL_SESSION') {
         navigate("/auth");
       }
     });
@@ -47,6 +49,11 @@ const Index = () => {
       if (!session) {
         navigate("/auth");
       }
+    }).catch((error) => {
+      console.error("Session error:", error);
+      // Clear any bad tokens
+      localStorage.removeItem('sb-dnoxmoyrzzakrmpbdrrn-auth-token');
+      navigate("/auth");
     });
 
     return () => subscription.unsubscribe();
@@ -183,6 +190,7 @@ const Index = () => {
               <p className="text-sm text-muted-foreground mt-1 font-medium">Real-time Customer Sentiment Monitoring</p>
             </div>
             <div className="flex items-center gap-4">
+              <SampleDataButton />
               <div className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
                 <div className="h-2 w-2 rounded-full bg-success animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
                 <span className="text-success font-semibold">Live</span>
@@ -209,6 +217,7 @@ const Index = () => {
           <div className="lg:col-span-3 space-y-6 overflow-y-auto">
             <DashboardStats feedback={feedback} />
             <TrendChart feedback={feedback} />
+            <IntegrationPanel />
           </div>
 
           {/* Column 2: Live Triage Feed */}
