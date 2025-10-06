@@ -206,7 +206,7 @@ SentinelAI uses a professional, support-team-friendly design:
 
 ## 📱 LinkedIn Post Content
 
-Copy this for easy sharing on LinkedIn:
+Copy this for easy sharing on LinkedIn: 
 
 ---
 
@@ -226,7 +226,7 @@ React + TypeScript + Supabase + Tailwind CSS + shadcn/ui
 
 Would love feedback from CX leaders & support pros! 💬
 
-**Live Demo**:  
+**Live Demo**:  https://sentinel-ai-alerts.lovable.app/
 **GitHub**: [Your Repo URL]
 
 #AI #CustomerExperience #Hackathon #SentimentAnalysis #SupportTools #React #Supabase #OpenToWork #TechInnovation
