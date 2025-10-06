@@ -20,6 +20,11 @@ export const IntegrationPanel = () => {
 
       if (error) throw error;
 
+      if (data?.configured === false) {
+        toast.error(data.error || 'Twitter API not configured');
+        return;
+      }
+
       toast.success(`Twitter monitoring complete! Processed ${data.processed} tweets`);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to monitor Twitter';
@@ -59,6 +64,11 @@ export const IntegrationPanel = () => {
       });
 
       if (error) throw error;
+
+      if (data?.configured === false) {
+        toast.error(data.error || 'Email service not configured');
+        return;
+      }
 
       toast.success(`Email alert sent to ${emailRecipient}!`);
     } catch (error: unknown) {
@@ -107,6 +117,9 @@ export const IntegrationPanel = () => {
       <div>
         <h3 className="text-lg font-bold text-foreground mb-2">Integration Testing</h3>
         <p className="text-sm text-muted-foreground">Test your monitoring and alert integrations</p>
+        <p className="text-xs text-info mt-2">
+          💡 Configure API keys in Supabase Edge Function secrets to enable integrations
+        </p>
       </div>
 
       {/* Twitter Monitoring */}

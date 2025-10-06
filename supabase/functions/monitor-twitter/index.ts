@@ -14,7 +14,17 @@ serve(async (req) => {
   try {
     const bearerToken = Deno.env.get('TWITTER_BEARER_TOKEN');
     if (!bearerToken) {
-      throw new Error('TWITTER_BEARER_TOKEN not configured');
+      console.error('TWITTER_BEARER_TOKEN not configured');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Twitter API key not configured. Please add TWITTER_BEARER_TOKEN in Supabase secrets.',
+          configured: false
+        }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
 
     const { query = 'your_brand_name' } = await req.json();

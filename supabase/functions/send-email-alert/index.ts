@@ -14,7 +14,25 @@ serve(async (req: Request): Promise<Response> => {
   }
 
   try {
+    if (!RESEND_API_KEY) {
+      console.error('RESEND_API_KEY not configured');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Email service not configured. Please add RESEND_API_KEY in Supabase secrets.',
+          configured: false
+        }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
     const { feedbackId, recipientEmail } = await req.json();
+
+    if (!recipientEmail || !recipientEmail.includes('@')) {
+      throw new Error('Valid recipient email is required');
+    }
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
