@@ -8,7 +8,7 @@ import { FeedbackCard } from "@/components/FeedbackCard";
 import { TrendChart } from "@/components/TrendChart";
 import { IntegrationPanel } from "@/components/IntegrationPanel";
 import { SampleDataButton } from "@/components/SampleDataButton";
-import { Loader2, AlertCircle, LogOut, User } from "lucide-react";
+import { Loader2, AlertCircle, LogOut, User, Settings as SettingsIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import type { Session, User as SupabaseUser } from "@supabase/supabase-js";
@@ -198,12 +198,29 @@ const Index = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleLogout}
+                onClick={() => navigate("/profile")}
                 className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
               >
                 <User className="h-4 w-4" />
-                <span className="hidden sm:inline">{user.email}</span>
+                <span className="hidden sm:inline">Profile</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate("/settings")}
+                className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
+              >
+                <SettingsIcon className="h-4 w-4" />
+                <span className="hidden sm:inline">Settings</span>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
+              >
                 <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>
