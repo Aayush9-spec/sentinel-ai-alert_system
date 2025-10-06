@@ -226,7 +226,7 @@ React + TypeScript + Supabase + Tailwind CSS + shadcn/ui
 
 Would love feedback from CX leaders & support pros! 💬
 
-**Live Demo**: [Your Deployed URL]  
+**Live Demo**:  
 **GitHub**: [Your Repo URL]
 
 #AI #CustomerExperience #Hackathon #SentimentAnalysis #SupportTools #React #Supabase #OpenToWork #TechInnovation
@@ -253,12 +253,12 @@ This project is open-source and available under the MIT License.
 
 ## 👥 Team
 
-Built with ❤️ by [Your Name/Team Name]
+Built with ❤️ by Aayush Kumar Singh/Mehak Sethi
 
 **Connect with us:**
-- LinkedIn: [Your Profile]
-- Twitter: [@YourHandle]
-- Email: your.email@example.com
+- LinkedIn: https://www.linkedin.com/in/aayush-kumar-singh-929981236/
+- Twitter: https://x.com/aayush03061102
+- Email: aayush03061102@gmail.com
 
 ---
 
