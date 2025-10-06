@@ -227,7 +227,6 @@ React + TypeScript + Supabase + Tailwind CSS + shadcn/ui
 Would love feedback from CX leaders & support pros! 💬
 
 **Live Demo**:  https://sentinel-ai-alerts.lovable.app/
-**GitHub**: [Your Repo URL]
 
 #AI #CustomerExperience #Hackathon #SentimentAnalysis #SupportTools #React #Supabase #OpenToWork #TechInnovation
 
