@@ -176,29 +176,23 @@ export const IntegrationPanel = () => {
       {/* Slack Alerts */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
-          <MessageSquare className="h-5 w-5 text-primary" />
+          <MessageSquare className="h-5 w-5 text-muted-foreground" />
           <h4 className="font-semibold text-foreground">Slack Alerts</h4>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+            Optional
+          </span>
         </div>
         <p className="text-xs text-muted-foreground">
-          Requires SLACK_WEBHOOK_URL to be configured
+          Configure SLACK_WEBHOOK_URL secret in Supabase to enable Slack notifications
         </p>
         <Button
           onClick={handleSlackAlert}
-          disabled={loading !== null}
+          disabled={true}
           variant="outline"
-          className="w-full"
+          className="w-full opacity-50"
         >
-          {loading === "slack" ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-              Sending...
-            </>
-          ) : (
-            <>
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Send Test Alert
-            </>
-          )}
+          <MessageSquare className="h-4 w-4 mr-2" />
+          Not Configured
         </Button>
       </div>
     </Card>
